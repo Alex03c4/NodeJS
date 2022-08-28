@@ -1,0 +1,9 @@
+// Comandos para una instalación en NPM desde 0
+npm init
+npm install express --save
+npm install mongoose --seve
+npm install multer --seve
+npm install validator --seve
+npm install cors --seve
+npm install nodemon --seve-dev
+npm start
