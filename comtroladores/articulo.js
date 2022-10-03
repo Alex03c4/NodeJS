@@ -65,27 +65,29 @@ const crear = (req, res) => {
 const listar = (req, res) => {
   let consulta = Articulo.find({});
 
-  if (req.params.ultimos) {
-    consulta.limit(3);
-  }
+  setTimeout(() => {
+    if (req.params.ultimos) {
+      consulta.limit(3);
+    }
 
-  consulta
-    .sort({ fecha: -1 }) //Para ordenar
-    .exec((error, articulos) => {
-      if (error || !articulos) {
-        return res.status(404).json({
-          status: "error",
-          mensaje: "No se han encontrado articulos",
+    consulta
+      .sort({ fecha: -1 }) //Para ordenar
+      .exec((error, articulos) => {
+        if (error || !articulos) {
+          return res.status(404).json({
+            status: "error",
+            mensaje: "No se han encontrado articulos",
+          }); 
+        }
+
+        return res.status(200).send({
+          status: "success",
+          parametro: req.params.ultimos,
+          contador: articulos.length,
+          articulos,
         });
-      }
-
-      return res.status(200).send({
-        status: "success",
-        parametro: req.params.ultimos,
-        contador: articulos.length,
-        articulos,
       });
-    });
+  }, 5000);
 };
 
 const uno = (req, res) => {
@@ -241,26 +243,26 @@ const buscador = (req, res) => {
   let busqueda = req.params.busqueda;
 
   // find OR
-  Articulo.find({"$or": [
-      { "titulo": { "$regex": busqueda, "$options": "i" } },
-      { "contenido": { "$regex": busqueda, "$options": "1" } },
+  Articulo.find({
+    $or: [
+      { titulo: { $regex: busqueda, $options: "i" } },
+      { contenido: { $regex: busqueda, $options: "1" } },
     ],
   })
-  .sort({ fecha: -1 })
-  .exec((error, articulosEncontrados) => {
-
-    if (error || !articulosEncontrados || articulosEncontrados.length <=0 ) {
-        return res.status(404).json({ 
+    .sort({ fecha: -1 })
+    .exec((error, articulosEncontrados) => {
+      if (error || !articulosEncontrados || articulosEncontrados.length <= 0) {
+        return res.status(404).json({
           status: "error",
-          mensaje: "No se han encontrado articulos"
+          mensaje: "No se han encontrado articulos",
         });
-    }
+      }
 
-    return res.status(200).json({
-      status: "success",  
-      articulos: articulosEncontrados
+      return res.status(200).json({
+        status: "success",
+        articulos: articulosEncontrados,
+      });
     });
-  });
 };
 
 module.exports = {
