@@ -65,7 +65,6 @@ const crear = (req, res) => {
 const listar = (req, res) => {
   let consulta = Articulo.find({});
 
-  setTimeout(() => {
     if (req.params.ultimos) {
       consulta.limit(3);
     }
@@ -87,7 +86,7 @@ const listar = (req, res) => {
           articulos,
         });
       });
-  }, 5000);
+  
 };
 
 const uno = (req, res) => {
